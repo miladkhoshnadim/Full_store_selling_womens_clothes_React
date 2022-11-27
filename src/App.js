@@ -1,8 +1,10 @@
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
 import dataCart from "./component/input";
 import React, { useState } from "react";
 import { ModalTag } from "./component/ModalCart/modal";
+import { SingelProductCart } from "./component/SingelProduct/SingelProductCart";
+
 const MyOrderss = [];
 
 function App() {
@@ -26,28 +28,6 @@ function App() {
       setdata(newdata.sort((a, b) => b.price - a.price));
     }
   }
-
-  function handelAddToCart(Added) {
-    newMyOrder = [...myOrders];
-    totPrices = 0;
-    const AddedToCart = newMyOrder.find((obj) => obj.id === Added.id);
-    console.log("!@#", AddedToCart);
-    if (AddedToCart) {
-      const findIndex = newMyOrder.findIndex((obj) => obj.id === Added.id);
-      newMyOrder[findIndex].cunter++;
-    } else if (!AddedToCart) {
-      console.log("!@#", 2);
-      Added.cunter = 1;
-      newMyOrder = [...newMyOrder, Added];
-    }
-    setmyOrders(newMyOrder);
-    // console.log("item", Added);
-  }
-
-  myOrders.forEach((item) => {
-    totPrices = totPrices + item.price * item.cunter;
-  });
-  setTotPrice(totPrices);
 
   function handelPayment() {
     alert("your Payment was Saccesfully but we dont have any products");
@@ -73,49 +53,17 @@ function App() {
     setTotPrice(totPrices);
   }
 
-  function handelModal(item) {
-    setModalDisplay(ModalDisplay ? false : true);
-    setitemModalDisplay(item);
-  }
-
-  // <div className="modalDiv">
-  //   <div>
-  //     <img
-  //       className="imageModal"
-  //       src={itemModalDisplay.url}
-  //     />
-  //   </div>
-  //   <div className="explainOrderModal">
-  //     <div className="DivClose">
-  //       <span>{itemModalDisplay.description}</span>
-  //       <button onClick={handelModal}>x</button>
-  //     </div>
-  //     <p>
-  //       This is for all the latest trends, no matter who you are, where
-  //       you’re from and what you’re up to. Exclusive to ASOS, our
-  //       universal brand is here for you, and comes in all our fit
-  //       ranges: ASOS Curve, Tall, Petite and Maternity. Created by us,
-  //       styled by you.
-  //     </p>
-  //     <div className="divModalAddCart">
-  //       <span>${itemModalDisplay.price} </span>
-  //       <button className="AddToCart" onClick={() => handelAddToCart(itemModalDisplay)}>
-  //         Add To cart❤
-  //       </button>
-  //     </div>
-  //   </div>
-  // </div>
-
   return (
     <>
       <div className="baseModal">
         {ModalDisplay && (
           <ModalTag
-            ite={itemModalDisplay}
-            ModalDispla={ModalDisplay}
-            setModalDispla={setModalDisplay}
-            myOrder={myOrders}
-            setmyOrder={setmyOrders}
+            item={itemModalDisplay}
+            ModalDisplay={ModalDisplay}
+            setModalDisplay={setModalDisplay}
+            myOrders={myOrders}
+            setmyOrders={setmyOrders}
+            setTotPrice={setTotPrice}
           />
         )}
 
@@ -146,23 +94,16 @@ function App() {
             </div>
             <div className="ProductsShow">
               {data.map((item) => (
-                <div
+                <SingelProductCart
                   key={item.id}
-                  className="SingelOrder"
-                  onClick={() => handelModal(item)}
-                >
-                  <img src={item.url} />
-                  <span className="IntroduseProduct">{item.description}</span>
-                  <div className="FoterSingelPruduct">
-                    <span>${item.price}</span>
-                    <button
-                      className="AddToCart"
-                      onClick={() => handelAddToCart(item)}
-                    >
-                      Add To cart❤
-                    </button>
-                  </div>
-                </div>
+                  item={item}
+                  ModalDisplay={ModalDisplay}
+                  setModalDisplay={setModalDisplay}
+                  myOrders={myOrders}
+                  setmyOrders={setmyOrders}
+                  setTotPrice={setTotPrice}
+                  setitemModalDisplay={setitemModalDisplay}
+                />
               ))}
             </div>
           </div>

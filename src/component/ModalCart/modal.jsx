@@ -1,8 +1,15 @@
-import React from "react";
+// import React from "react";
 
-export const ModalTag = ({item, ModalDisplay, setModalDisplay, myOrders, setmyOrders}) => {
-  
-    let newMyOrder = [...myOrders];
+export const ModalTag = ({
+  item,
+  ModalDisplay,
+  setModalDisplay,
+  myOrders,
+  setmyOrders,
+  setTotPrice,
+}) => {
+  let newMyOrder = [...myOrders];
+  let totPrices = 0;
   function handeelAddToCart(Added) {
     newMyOrder = [...myOrders];
     const AddedToCart = newMyOrder.find((obj) => obj.id === Added.id);
@@ -10,10 +17,19 @@ export const ModalTag = ({item, ModalDisplay, setModalDisplay, myOrders, setmyOr
       const findIndex = newMyOrder.findIndex((obj) => obj.id === Added.id);
       newMyOrder[findIndex].cunter++;
     } else if (!AddedToCart) {
-    Added.cunter = 1;
+      Added.cunter = 1;
       newMyOrder = [...newMyOrder, Added];
     }
     setmyOrders(newMyOrder);
+    handelModal()
+    CalcTotPrice();
+  }
+
+  function CalcTotPrice() {
+    myOrders.forEach((item) => {
+      totPrices = totPrices + item.price * item.cunter;
+    });
+    setTotPrice(totPrices);
   }
 
   function handelModal() {
